@@ -4,6 +4,7 @@ LINE_FOLLOWER = "line_follower"
 LIMIT_SWITCH = "limit_switch"
 speed = 1
 degrees_translate = 0.1
+motor_speed = 0.7
 
 def autonomous():
     print("Autonomous mode has started!")
@@ -31,29 +32,27 @@ def teleop():
         print("drive mode is 1")
         # Tank Drive
         while True:
-            left_motor_speed = -0.7
-            right_motor_speed = -0.7
             
             while Gamepad.get_value("dpad_up"):
-                Robot.set_value(KOALA_DRIVE, "velocity_b", left_motor_speed)
-                Robot.set_value(KOALA_DRIVE, "velocity_a", right_motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_b", motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
                 #print("up arrow") these crash dawn
                 
             while Gamepad.get_value("dpad_down"):
-                Robot.set_value(KOALA_DRIVE, "velocity_b", -left_motor_speed)
-                Robot.set_value(KOALA_DRIVE, "velocity_a", -right_motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_b", -motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_a", -motor_speed)
                 #print("down arrow") these crash dawn
             while Gamepad.get_value("dpad_right"):
-                Robot.set_value(KOALA_DRIVE, "velocity_b", left_motor_speed)
-                Robot.set_value(KOALA_DRIVE, "velocity_a", -right_motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_b", motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_a", -motor_speed)
                 #print("right arrow") these crash dawn
             while Gamepad.get_value("dpad_left"):
-                Robot.set_value(KOALA_DRIVE, "velocity_b", -left_motor_speed)
-                Robot.set_value(KOALA_DRIVE, "velocity_a", right_motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_b", -motor_speed)
+                Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
                 #print("left arrow") these crash dawn
         
-            Robot.set_value(KOALA_DRIVE, "velocity_b", 0)
-            Robot.set_value(KOALA_DRIVE, "velocity_a", 0)
+            Robot.set_value(KOALA_DRIVE, "velocity_b", 0) # left motor
+            Robot.set_value(KOALA_DRIVE, "velocity_a", 0) # right motor
     elif driving_mode == 2:
         # Tank Drive
         left_motor_speed = 0
@@ -93,25 +92,40 @@ def teleop():
         Robot.set_value(KOALA_DRIVE, "velocity_a", max(min(forward_speed - turning_speed, 1.0), -1.0))
 
 def autonomous_red():
-    forward(10)
+    forward(1,5) # 1 ft 5 in
     turn_right(45)
-
+    forward(1,4) # 1 ft 4 in
+    turn_right(45)
+    forward(2,6) # 2 ft 6 in
+    turn_right(45)
+    forward(10,0)
     
-def forward(distance):
+def autonomous_yellow():
+    forward(2,6)
+    turn_right(45)
+    forward(2,0)
+    turn_right(45)
+    forward(3,2) # 3 ft 2 in
+    turn_left(45)
+    forward(1,4) # 1 ft 4 in
+
+def forward(feet, inches):
+#def forward(distance):
     print("Forward")
-    Robot.set_value(KOALA_DRIVE, "velocity_b", -1.0)
-    Robot.set_value(KOALA_DRIVE, "velocity_a", -1.0)
-    Robot.sleep(distance*speed)
+    Robot.set_value(KOALA_DRIVE, "velocity_b", left_motor_speed)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", right_motor_speed)
+    #Robot.sleep(distance*speed)
+    Robot.sleep((feet+inches*12)*speed/motor_speed)
 
 def turn_right(degrees):
     print("right")
     Robot.set_value(KOALA_DRIVE, "velocity_b", 1.0)
     Robot.set_value(KOALA_DRIVE, "velocity_a", 1.0)
-    Robot.sleep(degrees*degrees_translate)
+    Robot.sleep(degrees*degrees_translate/motor_speed)
 
 def turn_left(degrees):
     print("right")
     Robot.set_value(KOALA_DRIVE, "velocity_b", 1.0)
     Robot.set_value(KOALA_DRIVE, "velocity_a", 1.0)
-    Robot.sleep(degrees*degrees_translate)
+    Robot.sleep(degrees*degrees_translate/motor_speed)
     
