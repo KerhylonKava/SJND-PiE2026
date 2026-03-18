@@ -1,5 +1,6 @@
 # Substitute device IDs when using real robot
 KOALA_DRIVE = "6_12014819996989542905"
+KOALA_HAMMERHEAD = "6_14079944033812652925"
 LINE_FOLLOWER = "line_follower"
 LIMIT_SWITCH = "limit_switch"
 speed = 1
@@ -22,6 +23,8 @@ def teleop_setup():
 
 def teleop():
     driving_mode = 1
+    Robot.set_value(KOALA_DRIVE, "invert_a", True)
+    print("Teleop mode has started!")
 
     if driving_mode == 0:
         # Driving straight
@@ -50,9 +53,15 @@ def teleop():
                 Robot.set_value(KOALA_DRIVE, "velocity_b", -motor_speed)
                 Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
                 #print("left arrow") these crash dawn
+            
+            while Gamepad.get_value("button_y"):
+                Robot.set_value(KOALA_HAMMERHEAD, "velocity_b", -0.1)
+            while Gamepad.get_value("button_a"):
+                Robot.set_value(KOALA_HAMMERHEAD, "velocity_b", 0.1)
         
             Robot.set_value(KOALA_DRIVE, "velocity_b", 0) # left motor
             Robot.set_value(KOALA_DRIVE, "velocity_a", 0) # right motor
+            Robot.set_value(KOALA_HAMMERHEAD, "velocity_b", 0) # Hammerhead Gear
     elif driving_mode == 2:
         # Tank Drive
         left_motor_speed = 0
