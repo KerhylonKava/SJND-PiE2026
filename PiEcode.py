@@ -1,9 +1,8 @@
-# Substitute device IDs when using real robot
-KOALA_DRIVE = "6_12014819996989542905"
+KOALA_DRIVE = "6_12014819996989542905" # Device ID
 KOALA_HAMMERHEAD = "6_14079944033812652925"
 LINE_FOLLOWER = "line_follower"
 LIMIT_SWITCH = "limit_switch"
-speed = 1
+speed = 0.1
 degrees_translate = 0.1
 motor_speed = 0.7
 
@@ -121,8 +120,8 @@ def autonomous_yellow():
 def forward(feet, inches):
 #def forward(distance):
     print("Forward")
-    Robot.set_value(KOALA_DRIVE, "velocity_b", left_motor_speed)
-    Robot.set_value(KOALA_DRIVE, "velocity_a", right_motor_speed)
+    Robot.set_value(KOALA_DRIVE, "velocity_b", motor_speed)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
     #Robot.sleep(distance*speed)
     Robot.sleep((feet+inches*12)*speed/motor_speed)
 
