@@ -1,16 +1,16 @@
 KOALA_DRIVE = "6_12543674147291395194" # Device ID
-KOALA_HAMMERHEAD = "6_2526867214509081710"
+KOALA_HAMMERHEAD = "6_5875620201982110994"
 LINE_FOLLOWER = "line_follower"
 LIMIT_SWITCH = "limit_switch"
-speed = 0.05
+speed = 0.7 # if you want autonomus to work
 degrees_translate = 0.1
-motor_speed = 0.7
+motor_speed = 1
 
 def autonomous():
     print("Autonomous mode has started!")
     # Left motor rotates in the opposite direction
     Robot.set_value(KOALA_DRIVE, "invert_b", True)
-    Robot.run(autonomous_red)
+    Robot.run(autonomous_test)
 
 def autonomous_main():
     pass
@@ -101,6 +101,20 @@ def teleop():
         Robot.set_value(KOALA_DRIVE, "velocity_b", max(min((forward_speed + turning_speed), 1.0), -1.0))
         Robot.set_value(KOALA_DRIVE, "velocity_a", max(min(forward_speed - turning_speed, 1.0), -1.0))
 
+def autonomous_test():
+    timer = 100
+    print("forward go")
+    while(timer>0):
+        Robot.set_value(KOALA_DRIVE, "velocity_b", motor_speed)
+        Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
+        print(timer)
+        print("going")
+        timer -=1
+    print("forward off")
+    Robot.set_value(KOALA_DRIVE, "velocity_b", 0)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", 0)
+    print("forward velocity = 0")
+
 def autonomous_red():
     forward(1,5) # 1 ft 5 in
     turn_right(45)
@@ -120,22 +134,35 @@ def autonomous_yellow():
     forward(1,4) # 1 ft 4 in
 
 def forward(feet, inches):
-#def forward(distance):
+    #def forward(distance):
     print("Forward")
     Robot.set_value(KOALA_DRIVE, "velocity_b", motor_speed)
     Robot.set_value(KOALA_DRIVE, "velocity_a", motor_speed)
     #Robot.sleep(distance*speed)
-    Robot.sleep((feet+(inches*12))*speed/motor_speed)
+    Robot.sleep((feet+(inches/12))*speed)
+    print("forward off")
+    Robot.set_value(KOALA_DRIVE, "velocity_b", 0)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", 0)
+    print("forward velocity = 0")
 
 def turn_right(degrees):
     print("right")
     Robot.set_value(KOALA_DRIVE, "velocity_b", 1.0)
     Robot.set_value(KOALA_DRIVE, "velocity_a", 1.0)
-    Robot.sleep(degrees*degrees_translate/motor_speed)
+    Robot.sleep(degrees*degrees_translate)
+    print("right off")
+    Robot.set_value(KOALA_DRIVE, "velocity_b", 0)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", 0)
+    print("right velocity = 0")
+    Robot.sleep()
 
 def turn_left(degrees):
-    print("right")
+    print("left")
     Robot.set_value(KOALA_DRIVE, "velocity_b", 1.0)
     Robot.set_value(KOALA_DRIVE, "velocity_a", 1.0)
-    Robot.sleep(degrees*degrees_translate/motor_speed)
+    Robot.sleep(degrees*degrees_translate)
+    print("turn left off off")
+    Robot.set_value(KOALA_DRIVE, "velocity_b", 0)
+    Robot.set_value(KOALA_DRIVE, "velocity_a", 0)
+    print("left velocity = 0")
     
